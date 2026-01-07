@@ -13,27 +13,79 @@
         </div>
         
         <div id="login-page" class="page hidden">
+            <div class="hero-slider">
+                <div class="slide active">
+                    <div class="slide-content">
+                        <h2>"For I know the plans I have for you"</h2>
+                        <p>- Jeremiah 29:11</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="slide-content">
+                        <h2>"Walk by faith, not by sight"</h2>
+                        <p>- 2 Corinthians 5:7</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="slide-content">
+                        <h2>"Your purpose is calling you"</h2>
+                        <p>Discover God's plan for your life</p>
+                    </div>
+                </div>
+            </div>
             <div class="auth-container">
-                <h1>Faith + Life Purpose</h1>
-                <form id="login-form">
+                <div class="floating-elements">
+                    <div class="float-element">✨</div>
+                    <div class="float-element">🙏</div>
+                    <div class="float-element">💫</div>
+                    <div class="float-element">✝️</div>
+                </div>
+                <h1 class="animated-title">Faith + Life Purpose</h1>
+                <form id="login-form" class="animated-form">
                     <input type="email" id="email" placeholder="Email" required>
                     <input type="password" id="password" placeholder="Password" required>
-                    <button type="submit">Login</button>
+                    <button type="submit" class="pulse-btn">Login</button>
                 </form>
-                <p>Don't have an account? <a href="#" id="show-signup">Sign up</a></p>
+                <p>Don't have an account? <a href="#" id="show-signup" class="glow-link">Sign up</a></p>
             </div>
         </div>
 
         <div id="signup-page" class="page hidden">
+            <div class="hero-slider">
+                <div class="slide active">
+                    <div class="slide-content">
+                        <h2>"Be strong and courageous"</h2>
+                        <p>- Joshua 1:9</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="slide-content">
+                        <h2>"You are fearfully and wonderfully made"</h2>
+                        <p>- Psalm 139:14</p>
+                    </div>
+                </div>
+                <div class="slide">
+                    <div class="slide-content">
+                        <h2>"Join our faith community"</h2>
+                        <p>Connect with believers worldwide</p>
+                    </div>
+                </div>
+            </div>
             <div class="auth-container">
-                <h1>Create Account</h1>
-                <form id="signup-form">
+                <div class="floating-elements">
+                    <div class="float-element">🌟</div>
+                    <div class="float-element">🕊️</div>
+                    <div class="float-element">♥️</div>
+                    <div class="float-element">🚇</div>
+                </div>
+                <h1 class="animated-title">Create Account</h1>
+                <form id="signup-form" class="animated-form">
                     <input type="text" id="signup-name" placeholder="Full Name" required>
                     <input type="email" id="signup-email" placeholder="Email" required>
                     <input type="password" id="signup-password" placeholder="Password" required>
-                    <button type="submit">Sign Up</button>
+                    <button type="submit" class="pulse-btn">Sign Up</button>
                 </form>
-                <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+                <p>Already have an account? <a href="#" id="show-login" class="glow-link">Login</a></p>
             </div>
         </div>
 
@@ -48,19 +100,43 @@
                 </div>
             </nav>
             <main class="main-content">
-                <h2>Welcome to Your Dashboard</h2>
+                <div class="welcome-banner">
+                    <h2 class="typewriter">Welcome to Your Dashboard</h2>
+                    <div class="daily-verse">
+                        <p id="verse-text">"Trust in the Lord with all your heart" - Proverbs 3:5</p>
+                    </div>
+                </div>
                 <div class="content-grid">
-                    <div class="card">
+                    <div class="card hover-lift" onclick="showModal('posts')">
+                        <div class="card-icon">📝</div>
                         <h3>Community Posts</h3>
                         <p>Share your faith journey with others</p>
+                        <div class="card-stats">24 new posts</div>
                     </div>
-                    <div class="card">
+                    <div class="card hover-lift" onclick="showModal('prayers')">
+                        <div class="card-icon">🙏</div>
                         <h3>Prayer Requests</h3>
                         <p>Submit and pray for others</p>
+                        <div class="card-stats">12 active requests</div>
                     </div>
-                    <div class="card">
+                    <div class="card hover-lift" onclick="showModal('groups')">
+                        <div class="card-icon">📚</div>
                         <h3>Bible Study Groups</h3>
                         <p>Join or create study groups</p>
+                        <div class="card-stats">8 groups available</div>
+                    </div>
+                </div>
+                <div class="activity-feed">
+                    <h3>Recent Activity</h3>
+                    <div class="activity-item slide-in">
+                        <span class="activity-icon">✨</span>
+                        <span>Sarah shared a testimony</span>
+                        <span class="activity-time">2 min ago</span>
+                    </div>
+                    <div class="activity-item slide-in">
+                        <span class="activity-icon">🙏</span>
+                        <span>John requested prayer</span>
+                        <span class="activity-time">5 min ago</span>
                     </div>
                 </div>
             </main>

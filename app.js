@@ -142,3 +142,80 @@ class App {
 document.addEventListener('DOMContentLoaded', () => {
     new App();
 });
+// Interactive Features
+class InteractiveFeatures {
+    constructor() {
+        this.currentSlide = 0;
+        this.slides = [];
+        this.verses = [
+            "\"Trust in the Lord with all your heart\" - Proverbs 3:5",
+            "\"For I know the plans I have for you\" - Jeremiah 29:11",
+            "\"Be strong and courageous\" - Joshua 1:9",
+            "\"Walk by faith, not by sight\" - 2 Corinthians 5:7",
+            "\"You are fearfully and wonderfully made\" - Psalm 139:14"
+        ];
+        this.init();
+    }
+
+    init() {
+        this.startSlideshow();
+        this.rotateVerses();
+        this.addCardAnimations();
+    }
+
+    startSlideshow() {
+        this.slides = document.querySelectorAll('.slide');
+        if (this.slides.length > 0) {
+            setInterval(() => {
+                this.nextSlide();
+            }, 4000);
+        }
+    }
+
+    nextSlide() {
+        if (this.slides.length === 0) return;
+        
+        this.slides[this.currentSlide].classList.remove('active');
+        this.currentSlide = (this.currentSlide + 1) % this.slides.length;
+        this.slides[this.currentSlide].classList.add('active');
+    }
+
+    rotateVerses() {
+        const verseElement = document.getElementById('verse-text');
+        if (verseElement) {
+            let verseIndex = 0;
+            setInterval(() => {
+                verseElement.style.opacity = '0';
+                setTimeout(() => {
+                    verseElement.textContent = this.verses[verseIndex];
+                    verseElement.style.opacity = '1';
+                    verseIndex = (verseIndex + 1) % this.verses.length;
+                }, 500);
+            }, 5000);
+        }
+    }
+
+    addCardAnimations() {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.2}s`;
+            card.classList.add('fadeInUp');
+        });
+    }
+}
+
+// Modal functionality
+function showModal(type) {
+    const messages = {
+        posts: 'Community Posts feature coming soon! Share your faith journey with others.',
+        prayers: 'Prayer Requests feature coming soon! Submit and pray for others.',
+        groups: 'Bible Study Groups feature coming soon! Join or create study groups.'
+    };
+    
+    alert(messages[type] || 'Feature coming soon!');
+}
+
+// Initialize interactive features when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    new InteractiveFeatures();
+});
