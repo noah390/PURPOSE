@@ -1,0 +1,143 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users collection
+    match /users/{userId} {
+      // Users can read their own data, admins can read all
+      allow read: if request.auth != null && 
+        (request.auth.uid == userId || isAdmin());
+      
+      // Users can update their own profile (except role), admins can update anything
+      allow update: if request.auth != null && 
+        (request.auth.uid == userId && !('role' in request.resource.data) || isAdmin());
+      
+      // Only system can create users (handled by Cloud Functions)
+      allow create: if false;
+      
+      // Only admins can delete users
+      allow delete: if isAdmin();
+    }
+    
+    // Posts collection
+    match /posts/{postId} {
+      // Everyone can read published non-premium posts
+      // Premium users can read premium posts
+      // Admins can read everything
+      allow read: if request.auth != null && 
+        (resource.data.isPublished == true && 
+         (resource.data.isPremium == false || isPremiumUser() || isAdmin()));
+      
+      // Only admins and moderators can create/update posts
+      allow create, update: if request.auth != null && 
+        (isAdmin() || isModerator());
+      
+      // Only admins can delete posts
+      allow delete: if isAdmin();
+    }
+    
+    // Comments collection
+    match /comments/{commentId} {
+      // Users can read non-moderated comments
+      allow read: if request.auth != null && resource.data.isModerated == false;
+      
+      // Authenticated users can create comments
+      allow create: if request.auth != null && 
+        request.auth.uid == request.resource.data.authorId;
+      
+      // Users can update their own comments, moderators can moderate
+      allow update: if request.auth != null && 
+        (request.auth.uid == resource.data.authorId || 
+         isModerator() || isAdmin());
+      
+      // Only moderators and admins can delete comments
+      allow delete: if isModerator() || isAdmin();
+    }
+    
+    // Groups collection
+    match /groups/{groupId} {
+      // Users can read active non-premium groups
+      // Premium users can read premium groups
+      allow read: if request.auth != null && 
+        resource.data.isActive == true &&
+        (resource.data.isPremium == false || isPremiumUser() || isAdmin());
+      
+      // Only admins can create/update/delete groups
+      allow create, update, delete: if isAdmin();
+    }
+    
+    // Messages collection (for live chat)
+    match /messages/{messageId} {
+      // Users can read non-deleted messages from groups they have access to
+      allow read: if request.auth != null && 
+        resource.data.isDeleted == false &&
+        canAccessGroup(resource.data.groupId);
+      
+      // Authenticated users can create messages
+      allow create: if request.auth != null && 
+        request.auth.uid == request.resource.data.authorId &&
+        canAccessGroup(request.resource.data.groupId);
+      
+      // Users can update their own messages, moderators can moderate
+      allow update: if request.auth != null && 
+        (request.auth.uid == resource.data.authorId || 
+         isModerator() || isAdmin());
+      
+      // Only moderators and admins can delete messages
+      allow delete: if isModerator() || isAdmin();
+    }
+    
+    // Admin logs collection
+    match /adminLogs/{logId} {
+      // Only admins can read logs
+      allow read: if isAdmin();
+      
+      // Only system can create logs (handled by Cloud Functions)
+      allow create: if false;
+      
+      // No updates or deletes allowed
+      allow update, delete: if false;
+    }
+    
+    // Notifications collection
+    match /notifications/{notificationId} {
+      // Users can only read their own notifications
+      allow read: if request.auth != null && 
+        request.auth.uid == resource.data.userId;
+      
+      // System creates notifications, users can mark as read
+      allow create: if false;
+      allow update: if request.auth != null && 
+        request.auth.uid == resource.data.userId &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead']);
+      
+      // Users can delete their own notifications
+      allow delete: if request.auth != null && 
+        request.auth.uid == resource.data.userId;
+    }
+    
+    // Helper functions
+    function isAdmin() {
+      return request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    function isModerator() {
+      return request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['moderator', 'admin'];
+    }
+    
+    function isPremiumUser() {
+      return request.auth != null && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['premium', 'moderator', 'admin'];
+    }
+    
+    function canAccessGroup(groupId) {
+      let group = get(/databases/$(database)/documents/groups/$(groupId));
+      return group.data.isActive == true &&
+        (group.data.isPremium == false || isPremiumUser());
+    }
+  }
+}
