@@ -1,11 +1,11 @@
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "your_firebase_api_key_here",
-    authDomain: "your_project_id.firebaseapp.com",
-    projectId: "your_project_id",
-    storageBucket: "your_project_id.firebasestorage.app",
-    messagingSenderId: "your_messaging_sender_id",
-    appId: "your_firebase_app_id"
+    apiKey: "AIzaSyAMocms2Zp1CdMBgW4XhvcHzaLwI_hSWQg",
+    authDomain: "purpose-aec15.firebaseapp.com",
+    projectId: "purpose-aec15",
+    storageBucket: "purpose-aec15.firebasestorage.app",
+    messagingSenderId: "971703720450",
+    appId: "1:971703720450:web:eaddf23a15d6bbf4cf651b"
 };
 
 // Initialize Firebase
@@ -16,4 +16,4 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 // Admin configuration
-const ADMIN_EMAIL = "admin@yourdomain.com";
+const ADMIN_EMAIL = "admin@purpose.com";
